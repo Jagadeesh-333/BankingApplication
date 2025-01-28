@@ -17,10 +17,13 @@ public class AccountController {
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
-    @PostMapping
-    public Account createAccount(@RequestBody Account account) {
-        return accountService.createAccount(account);
+    @PostMapping("/{id}/create")
+    public Account createAccount(@PathVariable Long id, @RequestBody Map<String, Object> request) {
+        String name = (String) request.get("accountHolderName");
+        Double balance = Double.valueOf(request.get("balance").toString()); // Handle conversion safely
+        return accountService.createAccount(id, name, balance);
     }
+
 
     @GetMapping("/{id}")
     public Account getAccount(@PathVariable Long id) {
