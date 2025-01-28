@@ -17,7 +17,11 @@ public class AccountService {
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
-    public Account createAccount(Account account) { 
+    public Account createAccount(Long id, String name, Double balance) {
+        if (accountRepository.existsById(id)) {
+            throw new RuntimeException("Account with ID " + id + " already exists!");
+        }
+        Account account = new Account(id, name, balance);
         return accountRepository.save(account);
     }
 
@@ -37,6 +41,8 @@ public class AccountService {
             throw new RuntimeException("Insufficient funds");
         }
         account.setBalance(account.getBalance() - amount);
+        System.out.println("Withdrawing " + amount + " from Account ID: " + id);
+
         return accountRepository.save(account);
     }
 }
